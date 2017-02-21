@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	strconv
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -60,8 +61,6 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 //
 	return nil, errors.New("Received unknown function invocation: " + function)
 //
-
-
 }
 
 // Query is our entry point for queries
@@ -99,7 +98,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	//s1 := strings.Join(s, ",")
 	
 	//err = stub.PutState("sum", []byte(s)) //write the variable into the chaincode state
-	err = stub.PutState(key, []byte(sum))
+	err = stub.PutState(key, sum)
 	if err != nil {
 		return nil, err
 	}
@@ -117,9 +116,7 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
 	}
-
-	key = args[0]//keys to read
-	//key = args[2]
+	key = args[0]//keys to read from chaincode
 	valAsbytes, err := stub.GetState(key)
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
