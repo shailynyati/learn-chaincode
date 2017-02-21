@@ -53,14 +53,15 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
-	if function == "init" {
-		return t.Init(stub, "init", args)
-	} else if function == "write" {
+    if function == "write" {
 		return t.write(stub, args)
 	}
-	fmt.Println("invoke did not find func: " + function)
-
+//	fmt.Println("invoke did not find func: " + function)
+//
 	return nil, errors.New("Received unknown function invocation: " + function)
+//
+
+
 }
 
 // Query is our entry point for queries
@@ -79,6 +80,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 // write - invoke function to write key/value pair
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, value string
+	var a,b int
 	var err error
 	fmt.Println("running write()")
 
@@ -86,19 +88,28 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 
-	key = args[0] //rename for funsies
-	value = args[1]
+//	key = args[0] //rename for funsies
+//	value = args[1]
+	a=args[0]
+	b=args[1]
+	key = args[2]
+	sum := Sum(a,b)
+	fmt.println("Sum==",sum)
 	
-	s := []string{value, " From Shaily"}
-	s1 := strings.Join(s, ",")
+	//s := []string{value, " From Shaily"}
+	//s1 := strings.Join(s, ",")
 	
-	err = stub.PutState(key, []byte(s1)) //write the variable into the chaincode state
+	//err = stub.PutState("sum", []byte(s)) //write the variable into the chaincode state
+	err = stub.PutState(key, []byte(sum))
 	if err != nil {
 		return nil, err
 	}
 	return nil, nil
 }
 
+func Sum(i, j int) (int) {
+    return i+j
+}
 // read - query function to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
@@ -109,7 +120,9 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	}
 
 	key = args[0]
+	//key = args[2]
 	valAsbytes, err := stub.GetState(key)
+	fmt.
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
 		return nil, errors.New(jsonResp)
