@@ -90,9 +90,9 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 
 //	key = args[0] //rename for funsies
 //	value = args[1]
-	a=args[0]
-	b=args[1]
-	key = args[2]
+	a,err := strconv.Atoi(args[0])
+	b,err := strconv.Atoi(args[1])
+	//key = args[2]
 	sum := Sum(a,b)
 	
 	//s := []string{value, " From Shaily"}
