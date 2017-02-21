@@ -20,7 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
-	strconv
+	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -104,7 +104,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	}
 	return nil, nil
 }
-
+//added function sum
 func Sum(i, j int) (int) {
     return i+j
 }
