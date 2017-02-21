@@ -79,7 +79,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, value string
 	var a,b int
-	var sum byte
+	var sum []byte
 	var err error
 	fmt.Println("running write()")
 
@@ -97,7 +97,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	//s := []string{value, " From Shaily"}
 	//s1 := strings.Join(s, ",")
 	
-	//err = stub.PutState("sum", []byte(s)) //write the variable into the chaincode state
+	//err = stub.PutState("sum", []byte(s)) //write the variable in chaincode state
 	err = stub.PutState(key, []byte(sum))
 	if err != nil {
 		return nil, err
@@ -106,7 +106,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 }
 //added function sum return type byte
 func Sum(i, j int) ([]byte) {
-    return []byte(i+j)
+    return ([]byte(i+j))
 }
 // read - query function to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
