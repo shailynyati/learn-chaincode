@@ -19,7 +19,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"strings"
 	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
@@ -80,6 +79,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, value string
 	var a,b int
+	var sum byte
 	var err error
 	fmt.Println("running write()")
 
@@ -98,15 +98,15 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	//s1 := strings.Join(s, ",")
 	
 	//err = stub.PutState("sum", []byte(s)) //write the variable into the chaincode state
-	err = stub.PutState(key, sum)
+	err = stub.PutState(key, []byte(sum))
 	if err != nil {
 		return nil, err
 	}
 	return nil, nil
 }
 //added function sum
-func Sum(i, j int) (int) {
-    return i+j
+func Sum(i, j int) (byte) {
+    return byte(i+j)
 }
 // read - query function to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
