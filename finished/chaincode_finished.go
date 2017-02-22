@@ -108,7 +108,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 func Sum(i, j int) ([]byte) {
     return ([]byte(i+j))
 }
-// read - query function to read key/value pair
+// read - query funct	ion to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
 	var err error
