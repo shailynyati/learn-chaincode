@@ -78,8 +78,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 // write - invoke function to write key/value pair
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, value string
-	var a,b int
-	var sum []byte
+	var a,b string
+	var sum []string
 	var err error
 	fmt.Println("running write()")
 
@@ -89,10 +89,10 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 
 //	key = args[0] //rename for funsies
 //	value = args[1]
-	a := strconv.Atoi(args[0])
-	b := strconv.Atoi(args[1])
+	//a := strconv.Atoi(args[0])
+	//b := strconv.Atoi(args[1])
 	//key = args[2]
-	sum := Sum(a,b)
+	sum := ConcatString(a,b)
 	
 	//s := []string{value, " From Shaily"}
 	//s1 := strings.Join(s, ",")
@@ -104,9 +104,10 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	}
 	return nil, nil
 }
-//added function sum return type byte[]
-func Sum(i, j int) ([]byte) {
-    return ([]byte(i+j))
+//added function concatstring
+func ConcatString(i,j,string)  {
+    return []string{i,j}
+
 }
 // read - query funct	ion to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
