@@ -89,8 +89,8 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 
 //	key = args[0] //rename for funsies
 //	value = args[1]
-	a,err := strconv.Atoi(args[0])
-	b,err := strconv.Atoi(args[1])
+	a := strconv.Atoi(args[0])
+	b := strconv.Atoi(args[1])
 	//key = args[2]
 	sum := Sum(a,b)
 	
@@ -104,7 +104,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	}
 	return nil, nil
 }
-//added function sum return type byte
+//added function sum return type byte[]
 func Sum(i, j int) ([]byte) {
     return ([]byte(i+j))
 }
