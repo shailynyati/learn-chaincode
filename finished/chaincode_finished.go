@@ -19,7 +19,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -79,7 +78,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, value string
 	var a,b string
-	var sum []string
+	var sum string
 	var err error
 	fmt.Println("running write()")
 
@@ -106,7 +105,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 }
 //added function concatstring
 func ConcatString(i,j,string)  {
-    return []string{i,j}
+    return string{i,j}
 
 }
 // read - query funct	ion to read key/value pair
