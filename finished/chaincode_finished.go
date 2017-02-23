@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"strings"
 )
 
 // SimpleChaincode example simple Chaincode implementation
@@ -31,6 +32,28 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error starting Simple chaincode: %s", err)
 	}
+}
+
+func SumProductDiff(i, j string) (string, string, string) {
+
+	var a, b int
+	var sum, prod, diff string
+
+	a, err1 := strconv.Atoi(i)
+
+	if err1 != nil {
+		// handle error
+	}
+	b, err2 := strconv.Atoi(j)
+	if err2 != nil {
+		// handle error
+	}
+
+	sum := a + b
+	prod := a * b
+	diff := a - b
+
+	return strconv.Itoa(sum), strconv.Itoa(prod), strconv.Itoa(diff)
 }
 
 // Init resets all the things
@@ -52,13 +75,13 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
-    if function == "write" {
+	if function == "write" {
 		return t.write(stub, args)
 	}
-//	fmt.Println("invoke did not find func: " + function)
-//
+	//	fmt.Println("invoke did not find func: " + function)
+	//
 	return nil, errors.New("Received unknown function invocation: " + function)
-//
+	//
 }
 
 // Query is our entry point for queries
@@ -77,8 +100,11 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 // write - invoke function to write key/value pair
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, value string
-	var a,b string
-	var sum string
+	key = args[0] //rename for funsies
+	value = args[1]
+	//var sum string
+	sum1, prod2, diff3 := SumProductDiff(key, value)
+	fmt.Println("Sum:", sum1, "| Product:", prod2, "| Diff:", diff3)
 	var err error
 	fmt.Println("running write()")
 
@@ -86,28 +112,19 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 
-//	key = args[0] //rename for funsies
-//	value = args[1]
-	//a := strconv.Atoi(args[0])
-	//b := strconv.Atoi(args[1])
-	//key = args[2]
-	sum := ConcatString(a,b)
-	
 	//s := []string{value, " From Shaily"}
 	//s1 := strings.Join(s, ",")
-	
-	//err = stub.PutState("sum", []byte(s)) //write the variable in chaincode state
-	err = stub.PutState(key, []byte(sum))
+
+	err = stub.PutState("sum", []byte(sum1)) //write the variable in chaincode state
+	//err = stub.PutState(key, []byte(sum))
 	if err != nil {
 		return nil, err
 	}
 	return nil, nil
 }
-//added function concatstring
-func ConcatString(i,j,string)  {
-    return string{i,j}
 
-}
+//added function concatstring
+
 // read - query funct	ion to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
@@ -116,12 +133,12 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
 	}
-	key = args[0]//keys to read from chaincode
+	key = args[0] //keys to read from chaincode
 	valAsbytes, err := stub.GetState(key)
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
 		return nil, errors.New(jsonResp)
-		
+
 	}
 
 	return valAsbytes, nil
