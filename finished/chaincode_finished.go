@@ -20,7 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"strings"
+	"strconv"
 )
 
 // SimpleChaincode example simple Chaincode implementation
@@ -37,7 +37,7 @@ func main() {
 func SumProductDiff(i, j string) (string, string, string) {
 
 	var a, b int
-	var sum, prod, diff string
+	//var sum, prod, diff int
 
 	a, err1 := strconv.Atoi(i)
 
@@ -50,7 +50,9 @@ func SumProductDiff(i, j string) (string, string, string) {
 	}
 
 	sum := a + b
+
 	prod := a * b
+
 	diff := a - b
 
 	return strconv.Itoa(sum), strconv.Itoa(prod), strconv.Itoa(diff)
