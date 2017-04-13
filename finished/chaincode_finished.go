@@ -35,10 +35,8 @@ func main() {
 }
 
 func SumProductDiff(i, j string) (string, string, string) {
-
 	var a, b int
 	//var sum, prod, diff int
-
 	a, err1 := strconv.Atoi(i)
 
 	if err1 != nil {
@@ -50,10 +48,9 @@ func SumProductDiff(i, j string) (string, string, string) {
 	}
 
 	sum := a + b
-
 	prod := a * b
-
 	diff := a - b
+	fmt.Printf("Sum complete")
 
 	return strconv.Itoa(sum), strconv.Itoa(prod), strconv.Itoa(diff)
 }
@@ -125,8 +122,6 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	return nil, nil
 }
 
-//added function concatstring
-
 // read - query funct	ion to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
@@ -140,8 +135,6 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
 		return nil, errors.New(jsonResp)
-
 	}
-
 	return valAsbytes, nil
 }
