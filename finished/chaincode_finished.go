@@ -1,19 +1,3 @@
-/*
-Copyright IBM Corp 2016 All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-		 http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package main
 
 import (
@@ -23,36 +7,58 @@ import (
 	"strconv"
 )
 
-// SimpleChaincode example simple Chaincode implementation
-type SimpleChaincode struct {
+type UserRegistrationsDetails struct {
+	Ffid        string `json:"ffid"`
+	Firstname   string `json:"firstname"`
+	Lastname    string `json:"lastname"`
+	DOB         string `json:"DOB"`
+	Email       string `json:"email"`
+	Address     string `json:"address"`
+	Country     string `json:"country"`
+	City        string `json:"city"`
+	Zip         string `json:"zip"`
+	CreatedBy   string `json:"createdby"`
+	Title       string `json:"title"`
+	Gender      string `json:"gender"`
+	TotalPoints string `json:"totalPoints"`
 }
 
 func main() {
-	err := shim.Start(new(SimpleChaincode))
+	err := shim.Start(new(UserRegistrationsDetails))
 	if err != nil {
-		fmt.Printf("Error starting Simple chaincode: %s", err)
+		fmt.Printf("Error starting User registration: %s", err)
 	}
 }
 
-func SumProductDiff(i, j string) (string, string, string) {
-	var a, b int
-	//var sum, prod, diff int
-	a, err1 := strconv.Atoi(i)
+func RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	fmt.Println("Entering UserRegistration")
 
-	if err1 != nil {
-		// handle error
-	}
-	b, err2 := strconv.Atoi(j)
-	if err2 != nil {
-		// handle error
+	if len(args) < 2 {
+		fmt.Println("Invalid number of args")
+		return nil, errors.New("Expected at least two arguments for User registration")
 	}
 
-	sum := a + b
-	prod := a * b
-	diff := a - b
-	fmt.Printf("Sum complete")
+	var ffId = args[0]
+	var UserRegistrationInput = args[1]
 
-	return strconv.Itoa(sum), strconv.Itoa(prod), strconv.Itoa(diff)
+	err := stub.PutState(ffId, []byte(UserRegistrationInput))
+	if err != nil {
+		fmt.Println("Could not save UserRegistration to ledger", err)
+		return nil, err
+	}
+
+	var event = customEvent{"RegisterUser", "Successfully register User" + ffId}
+	eventBytes, err := json.Marshal(&event)
+	if err != nil {
+		return nil, err
+	}
+	err = stub.SetEvent("evtSender", eventBytes)
+	if err != nil {
+		fmt.Println("Could not set event for User registration", err)
+	}
+
+	fmt.Println("Successfully saved User Registration")
+	return nil, nil
 }
 
 // Init resets all the things
@@ -69,13 +75,13 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	return nil, nil
 }
 
-// Invoke isur entry point to invoke a chaincode function
+// Invoke is your entry point to invoke a chaincode function
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
-	if function == "write" {
-		return t.write(stub, args)
+	if function == "RegisterUser" {
+		return t.RegisterUser(stub, args)
 	}
 	//	fmt.Println("invoke did not find func: " + function)
 	//
@@ -101,18 +107,9 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	var key, value string
 	key = args[0] //rename for funsies
 	value = args[1]
-	//var sum string
-	sum1, prod2, diff3 := SumProductDiff(key, value)
-	fmt.Println("Sum:", sum1, "| Product:", prod2, "| Diff:", diff3)
-	var err error
-	fmt.Println("running write()")
-
 	if len(args) != 2 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
-
-	//s := []string{value, " From Shaily"}
-	//s1 := strings.Join(s, ",")
 
 	err = stub.PutState("sum", []byte(sum1)) //write the variable in chaincode state
 	//err = stub.PutState(key, []byte(sum))
