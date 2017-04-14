@@ -39,7 +39,7 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 
 	var ffId = args[0]
 	var UserRegistrationInput = args[1]
-	var output;
+	var output string
 	err := stub.PutState(ffId, []byte(UserRegistrationInput))
 	if err != nil {
 		output = "failure"
@@ -48,8 +48,7 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 		fmt.Println("Could not save UserRegistration to ledger", err)
 		return stub.getState(output), err
 	}
-	
-	
+
 	output = "success"
 	fmt.Println("Successfully saved User Registration")
 	return stub.getState(output), nil
