@@ -43,15 +43,15 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 	err := stub.PutState(ffId, []byte(UserRegistrationInput))
 	if err != nil {
 		output = "failure"
-		stub.putState(output, err)
+		stub.PutState(output, err)
 
 		fmt.Println("Could not save UserRegistration to ledger", err)
-		return stub.getState(output), err
+		return stub.GetState(output), err
 	}
 
 	output = "success"
 	fmt.Println("Successfully saved User Registration")
-	return stub.getState(output), nil
+	return stub.GetState(output), nil
 }
 
 // Init resets all the things
