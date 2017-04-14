@@ -29,7 +29,7 @@ func main() {
 	}
 }
 
-func RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	fmt.Println("Entering UserRegistration")
 
 	if len(args) < 2 {
@@ -46,18 +46,8 @@ func RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, erro
 		return nil, err
 	}
 
-	var event = customEvent{"RegisterUser", "Successfully register User" + ffId}
-	eventBytes, err := json.Marshal(&event)
-	if err != nil {
-		return nil, err
-	}
-	err = stub.SetEvent("evtSender", eventBytes)
-	if err != nil {
-		fmt.Println("Could not set event for User registration", err)
-	}
-
 	fmt.Println("Successfully saved User Registration")
-	return nil, nil
+	return "success", nil
 }
 
 // Init resets all the things
