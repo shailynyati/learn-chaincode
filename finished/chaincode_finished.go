@@ -62,7 +62,7 @@ func RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, erro
 }
 
 // Init resets all the things
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *UserRegistrationsDetails) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -76,7 +76,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 }
 
 // Invoke is your entry point to invoke a chaincode function
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *UserRegistrationsDetails) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
@@ -90,7 +90,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 }
 
 // Query is our entry point for queries
-func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *UserRegistrationsDetails) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
@@ -103,24 +103,24 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 }
 
 // write - invoke function to write key/value pair
-//func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-//	var key, value string
-//	key = args[0] //rename for funsies
-//	value = args[1]
-//	if len(args) != 2 {
-//		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
-//	}
-//
-//	err = stub.PutState("sum", []byte(sum1)) //write the variable in chaincode state
-//	//err = stub.PutState(key, []byte(sum))
-//	if err != nil {
-//		return nil, err
-//	}
-//	return nil, nil
-//}
+func (t *UserRegistrationsDetails) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var key, value string
+	key = args[0] //rename for funsies
+	value = args[1]
+	if len(args) != 2 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
+	}
+
+	err = stub.PutState("sum", []byte(sum1)) //write the variable in chaincode state
+	//err = stub.PutState(key, []byte(sum))
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
 
 // read - query funct	ion to read key/value pair
-func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *UserRegistrationsDetails) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
 	var err error
 
