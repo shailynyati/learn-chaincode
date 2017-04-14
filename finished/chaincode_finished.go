@@ -6,6 +6,9 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
+type SimpleChaincode struct {
+}
+
 type UserRegistrationsDetails struct {
 	Ffid        string `json:"ffid"`
 	Firstname   string `json:"firstname"`
@@ -23,13 +26,13 @@ type UserRegistrationsDetails struct {
 }
 
 func main() {
-	err := shim.Start(new(UserRegistrationsDetails))
+	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
 		fmt.Printf("Error starting User registration: %s", err)
 	}
 }
 
-func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	fmt.Println("Entering UserRegistration")
 
 	if len(args) < 2 {
@@ -39,10 +42,10 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 
 	var ffId = args[0]
 	var UserRegistrationInput = args[1]
-	var UserRegistration UserRegistrationDetails
+	var UserRegistration UserRegistrationInput
 	//var output string
-	err = json.Unmarshal([]byte(UserRegistrationInput), &UserRegistration)
-	err := stub.PutState(ffId, []byte(UserRegistration))
+	UserRegistrationBytes,err := json.Marshal(&UserRegistration)
+	err = stub.PutState(ffId, UserRegistrationBytes))
 
 	if err != nil {
 		//output = "failure"
@@ -58,7 +61,7 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 }
 
 // Init resets all the things
-func (t *UserRegistrationsDetails) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -72,7 +75,7 @@ func (t *UserRegistrationsDetails) Init(stub shim.ChaincodeStubInterface, functi
 }
 
 // Invoke is your entry point to invoke a chaincode function
-func (t *UserRegistrationsDetails) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
@@ -86,7 +89,7 @@ func (t *UserRegistrationsDetails) Invoke(stub shim.ChaincodeStubInterface, func
 }
 
 // Query is our entry point for queries
-func (t *UserRegistrationsDetails) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
@@ -116,7 +119,7 @@ func (t *UserRegistrationsDetails) Query(stub shim.ChaincodeStubInterface, funct
 //}
 
 // read - query function to read key/value pair
-func (t *UserRegistrationsDetails) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
 	var err error
 
