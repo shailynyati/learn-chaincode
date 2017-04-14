@@ -29,7 +29,7 @@ func main() {
 	}
 }
 
-func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface, args []string) (string, error) {
+func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	fmt.Println("Entering UserRegistration")
 
 	if len(args) < 2 {
@@ -39,15 +39,20 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 
 	var ffId = args[0]
 	var UserRegistrationInput = args[1]
-
+	var output;
 	err := stub.PutState(ffId, []byte(UserRegistrationInput))
 	if err != nil {
-		fmt.Println("Could not save UserRegistration to ledger", err)
-		return "failure", err
-	}
+		output = "failure"
+		stub.putState("output", err)
 
+		fmt.Println("Could not save UserRegistration to ledger", err)
+		return stub.getState(output), err
+	}
+	
+	
+	output = "success"
 	fmt.Println("Successfully saved User Registration")
-	return "success", nil
+	return stub.getState(output), nil
 }
 
 // Init resets all the things
@@ -56,7 +61,7 @@ func (t *UserRegistrationsDetails) Init(stub shim.ChaincodeStubInterface, functi
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
-	err := stub.PutState("hello_world", []byte(args[0]))
+	err := stub.PutState("User-1", []byte(args[0]))
 	if err != nil {
 		return nil, err
 	}
