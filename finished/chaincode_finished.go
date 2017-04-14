@@ -43,7 +43,7 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 	err := stub.PutState(ffId, []byte(UserRegistrationInput))
 	if err != nil {
 		output = "failure"
-		stub.putState("output", err)
+		stub.putState(output, err)
 
 		fmt.Println("Could not save UserRegistration to ledger", err)
 		return stub.getState(output), err
@@ -112,7 +112,7 @@ func (t *UserRegistrationsDetails) Query(stub shim.ChaincodeStubInterface, funct
 //	return nil, nil
 //}
 
-// read - query funct	ion to read key/value pair
+// read - query function to read key/value pair
 func (t *UserRegistrationsDetails) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
 	var err error
