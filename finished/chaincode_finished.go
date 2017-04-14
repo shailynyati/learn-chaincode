@@ -34,7 +34,7 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 
 	if len(args) < 2 {
 		fmt.Println("Invalid number of args")
-		return nil, errors.New("Expected at least two arguments for User registration")
+		return "error", errors.New("Expected at least two arguments for User registration")
 	}
 
 	var ffId = args[0]
