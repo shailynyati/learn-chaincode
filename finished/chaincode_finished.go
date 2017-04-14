@@ -42,9 +42,9 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 
 	var ffId = args[0]
 	var UserRegistrationInput = args[1]
-	var UserRegistration UserRegistrationInput
+	var UserRegistrationInput UserRegistrationDetails
 	//var output string
-	UserRegistrationBytes,err := json.Marshal(&UserRegistration)
+	UserRegistrationBytes,err := json.Marshal(&UserRegistrationInput)
 	err = stub.PutState(ffId, UserRegistrationBytes))
 
 	if err != nil {
