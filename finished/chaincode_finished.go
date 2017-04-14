@@ -42,7 +42,7 @@ func (t *UserRegistrationsDetails) RegisterUser(stub shim.ChaincodeStubInterface
 	var UserRegistration UserRegistrationDetails
 	//var output string
 	err = json.Unmarshal([]byte(UserRegistrationInput), &UserRegistration)
-	err := stub.PutState(ffId, []byte(UserRegistrationInput))
+	err := stub.PutState(ffId, []byte(UserRegistration))
 
 	if err != nil {
 		//output = "failure"
