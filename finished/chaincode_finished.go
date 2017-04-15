@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
+	"log"
 )
 
 type SimpleChaincode struct {
@@ -35,7 +36,7 @@ func main() {
 
 func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	fmt.Println("Entering UserRegistration")
-
+	log.Print("Entering UserRegistration")
 	if len(args) < 2 {
 		fmt.Println("Invalid number of args")
 		return nil, errors.New("Expected at least two arguments for User registration")
@@ -55,7 +56,7 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 		fmt.Println("Could not save UserRegistration to ledger", err)
 		return nil, err
 	}
-
+	
 	//output = "success"
 	fmt.Println("Successfully saved User Registration")
 	return nil, nil
