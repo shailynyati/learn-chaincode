@@ -83,6 +83,7 @@ func AddDeletePoints(ffId string, operator string, points int)(string){
 
 
 func getPoints(string ffid)(int){
+	user :=
 	
 }
 
@@ -123,8 +124,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "getUser" { //read a variable
-		return t.getUser(stub, args)
+	if function == "getUserAsBytes" { //read a variable
+		return t.getUserAsBytes(stub, args)
 	}
 	fmt.Println("query did not find func: " + function)
 
@@ -132,7 +133,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 }
 
 // Get User - query function to read key/value pair
-func (t *SimpleChaincode) getUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) getUserAsBytes(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var  jsonResp string
 	var err error
 
@@ -142,7 +143,7 @@ func (t *SimpleChaincode) getUser(stub shim.ChaincodeStubInterface, args []strin
 	ffId := args[0] //keys to read from chaincode
 	
 	userAsbytes, err := stub.GetState(ffId)
-	gettUserAsJson(userAsbytes)
+	getUser(userAsbytes)
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + ffId + "\"}"
 		return nil, errors.New(jsonResp)
@@ -151,12 +152,10 @@ func (t *SimpleChaincode) getUser(stub shim.ChaincodeStubInterface, args []strin
 }
 
 
-func  getUserAsJson([]byte userAsbytes) (string){
+func getUser([]byte userAsbytes) (string){
 	
-	var user UserRegistrationsDetails
+	var user UserRegistrationsDetails.
 	userAsJson := json.Unmarshal(userAsbytes,&user)
-	
 	return userAsJson
-	
 	
 }
