@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"encoding/json"
 )
 
 type SimpleChaincode struct {
@@ -60,6 +61,36 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 	return nil, nil
 }
 
+func AddDeletePoints(ffId string, operator string, points int)(string){
+	
+	var output string
+	user UserRegistrationDetails := getUser(ffId)
+	totalPoints := user.
+	if(operator=="Add"){
+		totalPoints = totalPoints+points
+		output = "success"
+	}
+		else if(totalPoints == 0 or points>totalPoints){
+			return output = "failure"
+			else{
+				totalPoints = totalPoints-points
+				output="success"	
+			}
+	}
+		
+		return output	
+}
+
+
+func getPoints(string ffid)(int){
+	
+}
+
+
+
+
+
+
 // Init resets all the things
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if len(args) != 1 {
@@ -73,7 +104,6 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 
 	return nil, nil
 }
-
 // Invoke is your entry point to invoke a chaincode function
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
@@ -93,44 +123,40 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "read" { //read a variable
-		return t.read(stub, args)
+	if function == "getUser" { //read a variable
+		return t.getUser(stub, args)
 	}
 	fmt.Println("query did not find func: " + function)
 
 	return nil, errors.New("Received unknown function query: " + function)
 }
 
-// write - invoke function to write key/value pair
-//func (t *UserRegistrationsDetails) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-//	var key, value string
-//	key = args[0] //rename for funsies
-//	value = args[1]
-//	if len(args) != 2 {
-//		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
-//	}
-//
-//	err = stub.PutState("sum", []byte(sum1)) //write the variable in chaincode state
-//	//err = stub.PutState(key, []byte(sum))
-//	if err != nil {
-//		return nil, err
-//	}
-//	return nil, nil
-//}
-
-// read - query function to read key/value pair
-func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var key, jsonResp string
+// Get User - query function to read key/value pair
+func (t *SimpleChaincode) getUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var  jsonResp string
 	var err error
 
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
 	}
-	key = args[0] //keys to read from chaincode
-	valAsbytes, err := stub.GetState(key)
+	ffId := args[0] //keys to read from chaincode
+	
+	userAsbytes, err := stub.GetState(ffId)
+	gettUserAsJson(userAsbytes)
 	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
+		jsonResp = "{\"Error\":\"Failed to get state for " + ffId + "\"}"
 		return nil, errors.New(jsonResp)
 	}
-	return valAsbytes, nil
+	return userAsbytes, nil
+}
+
+
+func  getUserAsJson([]byte userAsbytes) (string){
+	
+	var user UserRegistrationsDetails
+	userAsJson := json.Unmarshal(userAsbytes,&user)
+	
+	return userAsJson
+	
+	
 }
