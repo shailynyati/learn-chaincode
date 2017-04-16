@@ -26,7 +26,7 @@ type UserRegistrationsDetails struct {
 	Gender      string `json:"gender"`
 	TotalPoints string `json:"totalPoints"`
 }
-
+var userAsbytes;
 func main() {
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
@@ -43,8 +43,9 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 	}
 
 	var ffId = args[0]
-	var UserRegistrationInput = args[1]
 	var UserRegistrationInput UserRegistrationDetails
+	UserRegistrationInput = args[1]
+	
 	//var output string
 	UserRegistrationBytes,err := json.Marshal(&UserRegistrationInput)
 	err = stub.PutState(ffId, UserRegistrationBytes))
@@ -66,7 +67,7 @@ func AddDeletePoints(ffId string, operator string, points int)(string){
 	
 	var output string
 	user UserRegistrationDetails := getUser(ffId)
-	totalPoints := user.
+	totalPoints := user.getPoints(ffId)
 	if(operator=="Add"){
 		totalPoints = totalPoints+points
 		output = "success"
@@ -78,19 +79,15 @@ func AddDeletePoints(ffId string, operator string, points int)(string){
 				output="success"	
 			}
 	}
-		
 		return output	
 }
 
-
 func getPoints(string ffid)(int){
-	user :=
+	user : = getUser(ffId)
+	user 
+	
 	
 }
-
-
-
-
 
 
 // Init resets all the things
@@ -126,7 +123,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
 	// Handle different functions
 	if function == "getUserAsBytes" { //read a variable
-		return t.getUserAsBytes(stub, args)
+		user =  t.getUserAsBytes(stub, args)
 	}
 	fmt.Println("query did not find func: " + function)
 
@@ -143,8 +140,8 @@ func (t *SimpleChaincode) getUserAsBytes(stub shim.ChaincodeStubInterface, args 
 	}
 	ffId := args[0] //keys to read from chaincode
 	
-	userAsbytes, err := stub.GetState(ffId)
-	getUser(userAsbytes)
+	userAsbytes, err = stub.GetState(ffId)
+	getUser(ffId)
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + ffId + "\"}"
 		return nil, errors.New(jsonResp)
@@ -152,11 +149,9 @@ func (t *SimpleChaincode) getUserAsBytes(stub shim.ChaincodeStubInterface, args 
 	return userAsbytes, nil
 }
 
-
-func getUser([]byte userAsbytes) (string){
-	
-	var user UserRegistrationsDetails.
-	userAsJson := json.Unmarshal(userAsbytes,&user)
-	return userAsJson
+func getUser(ffId string) (UserRegistrationsDetails){
+	var user UserRegistrationsDetails
+	err := json.Unmarshal(userAsbytes,&user)
+	return user
 	
 }
