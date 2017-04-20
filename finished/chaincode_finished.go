@@ -1,18 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"encoding/json"
 	"log"
-	"strconv"
 )
 
 type SimpleChaincode struct {
 }
 
-type UserRegistrationsDetails struct {
+type UserRegistrationDetails struct {
 	Ffid        string `json:"ffid"`
 	Firstname   string `json:"firstname"`
 	Lastname    string `json:"lastname"`
@@ -27,8 +26,9 @@ type UserRegistrationsDetails struct {
 	Gender      string `json:"gender"`
 	TotalPoints string `json:"totalPoints"`
 }
+
 var userAsbytes []byte
-var UserRegistrationInput UserRegistrationsDetails
+var UserRegistrationInput UserRegistrationDetails
 
 func main() {
 	err := shim.Start(new(SimpleChaincode))
@@ -44,63 +44,61 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 		fmt.Println("Invalid number of args")
 		return nil, errors.New("Expected at least two arguments for User registration")
 	}
-	user:={
-		ffId := args[0]
-		userDetails:=[]string{args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9],args[10],args[11],args[12]
-//		lastname := args[2]
-//		DOB := args[3]
-//		email := args[4]
-//		address := args[5]
-//		country := args[6]
-//		city := args[7]
-//		zip := args[8]
-//		createdby := args[9]
-//		title := args[10]
-//		gender := args[11]
-//		totalPoints := args[12]
-    }	
+	var user = UserRegistrationDetails{
+		Ffid:        args[0],
+		Firstname:   args[1],
+		Lastname:    args[2],
+		DOB:         args[3],
+		Email:       args[4],
+		Address:     args[5],
+		Country:     args[6],
+		City:        args[7],
+		Zip:         args[8],
+		CreatedBy:   args[9],
+		Title:       args[10],
+		Gender:      args[11],
+		TotalPoints: args[12]}
 	//var output string
-	UserRegistrationBytes,err := json.Marshal(user)
-	err = stub.PutState(user.ffId, UserRegistrationBytes)
+	//var UserRegistrationBytes []byte
+	//var err string
+	UserRegistrationBytes, err := json.Marshal(user)
+	err = stub.PutState(user.Ffid, UserRegistrationBytes)
 
 	if err != nil {
-		//output = "failure"
-		//stub.PutState(output, nil)
-
 		fmt.Println("Could not save UserRegistration to ledger", err)
 		return nil, err
 	}
-	
-	//output = "success"
+
 	fmt.Println("Successfully saved User Registration")
 	return nil, nil
 }
 
-func AddDeletePoints(ffId string, operator string, points int)(string){
-		
-	var output string
-	totalPoints := getPoints(ffId)
-	if(operator=="Add"){
-		totalPoints = totalPoints+points
-		output = "success"
-	}
-	 if((totalPoints == 0) or (points>totalPoints)){
-		 	output = "failure"
-	 }			return output
-			else{
-				totalPoints = totalPoints-points
-				output="success"	
-			}
-	return output	
-}
+//func AddDeletePoints(ffId string, operator string, points int)(string){
+//
+//	var output string
+//	var totalPoints int = getPoints(ffId)
+//	if(operator=="Add"){
+//		totalPoints = totalPoints+points
+//		output = "success"
+//	}
+//	else if((totalPoints == 0) && (points>totalPoints)){
+//		output = "failure"
+//	}
+//	 else
+//	 {
+//		totalPoints = totalPoints-points
+//		output="success"
+//	 }
+//	return output
+//}
 
-func getPoints(string ffid)(int){
-	var user UserRegistrationsDetails = getUser(ffId);
-	return strconv.Atoi(user.TotalPoints)
-}
+//func getPoints(string ffid) int {
+//	var user UserRegistrationDetails = getUser(ffId)
+//	return strconv.Atoi(user.TotalPoints)
+//}
 
 // Init resets all the things
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string ,args []string) ([]byte, error) {
+func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -112,6 +110,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 
 	return nil, nil
 }
+
 // Invoke is your entry point to invoke a chaincode function
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
@@ -121,9 +120,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.RegisterUser(stub, args)
 	}
 	//	fmt.Println("invoke did not find func: " + function)
-	//
 	return nil, errors.New("Received unknown function invocation: " + function)
-	//
 }
 
 // Query is our entry point for queries
@@ -141,16 +138,16 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
 // Get User - query function to read key/value pair
 func (t *SimpleChaincode) getUserAsBytes(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var  jsonResp string
+	var jsonResp string
 	var err error
 
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
 	}
 	ffId := args[0] //keys to read from chaincode
-	
+
 	userAsbytes, err = stub.GetState(ffId)
-	getUser(ffId)
+	//getUser(ffId)
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + ffId + "\"}"
 		return nil, errors.New(jsonResp)
@@ -158,11 +155,11 @@ func (t *SimpleChaincode) getUserAsBytes(stub shim.ChaincodeStubInterface, args 
 	return userAsbytes, nil
 }
 
-func getUser(ffId string) (UserRegistrationsDetails){
-	var user UserRegistrationsDetails
-	var err = json.Unmarshal(userAsbytes,&user)
-	if(user.Ffid==UserRegistrationInput.Ffid)
-		return user
-	else 
-		return nil
-}
+//func getUser(ffId string) (UserRegistrationDetails){
+//	var user UserRegistrationDetails
+//	var err = json.Unmarshal(userAsbytes,&user)
+//	if(user.Ffid==UserRegistrationInput.Ffid)
+//		return user
+//
+//
+//}
