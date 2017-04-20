@@ -128,8 +128,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "getUserAsBytes" { //read a variable
-		t.getUserAsBytes(stub, args)
+	if function == "read" { //read a variable
+		t.read(stub, args)
 	}
 	fmt.Println("query did not find func: " + function)
 
@@ -137,7 +137,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 }
 
 // Get User - query function to read key/value pair
-func (t *SimpleChaincode) getUserAsBytes(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var jsonResp string
 	var err error
 
