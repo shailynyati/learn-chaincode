@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"log"
+	"strconv"
 )
 
 type SimpleChaincode struct {
@@ -88,6 +89,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	UserRegistrationBytes := json.Marshal(user_json)
 
 	err := stub.PutState(args[0], UserRegistrationBytes)
+	return nil, nil
 
 }
 
@@ -139,9 +141,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "read" { //read a variable
-		return t.read(stub, args)
-	}
+	//	if function == "read" { //read a variable
+	//		return t.read(stub, args)
+	//	}
 	if function == "getUser" {
 		return t.getUser(stub, args)
 	}
