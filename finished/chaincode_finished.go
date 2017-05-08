@@ -83,6 +83,11 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	pointsToModify := args[2]
 
 	userAsbytes, _ := t.getUser(stub, args)
+
+	if 1 == 1 {
+		return userAsbytes, nil
+	}
+
 	user := UserRegistrationDetails{}
 	err := json.Unmarshal(userAsbytes, &user)
 
