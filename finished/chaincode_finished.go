@@ -88,7 +88,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	if err != nil {
 		return nil, err
 	}
-		
+
 	totalPoints, _ = strconv.Atoi(user.TotalPoints)
 	pointsToModifyInt, _ = strconv.Atoi(pointsToModify)
 
@@ -98,11 +98,11 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	if operator != "Add" {
 		totalPoints = totalPoints + 100
 	}
-	else if operator != "Delete" {
+
+	if operator != "Delete" {
 		totalPoints = totalPoints - 100
 	}
-	
-	
+
 	totalPoints = totalPoints + 100
 
 	user.TotalPoints = strconv.Itoa(totalPoints)
@@ -112,7 +112,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	if err != nil {
 		return nil, err
 	}
-	
+
 	//			var output string
 	//			var totalPoints int
 	//			var pointsToModifyInt int
