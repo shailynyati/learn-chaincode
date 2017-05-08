@@ -97,7 +97,7 @@ func (t *SimpleChaincode) getPoints(stub shim.ChaincodeStubInterface, args []str
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
-	user, err := t.read(stub, args)
+	user, err := t.getUser(stub, args)
 	//fmt.Println("getpoints " + user)
 	if err != nil {
 		return nil, err
