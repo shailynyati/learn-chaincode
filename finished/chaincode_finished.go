@@ -74,8 +74,8 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	var totalPoints int
 	ffId := args[0]
 	operator := args[1]
-	points := getPoints(stub, args)
-	userAsbytes := getUser(stub, args)
+	points := t.getPoints(stub, args)
+	userAsbytes := t.getUser(stub, args)
 	user := UserRegistrationDetails{}
 	user_json := json.Unmarshal(userAsbytes, &user)
 	totalPoints = strconv.Atoi(user_json.TotalPoints)
