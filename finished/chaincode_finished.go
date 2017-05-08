@@ -78,7 +78,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	var pointsToModifyInt int
 
 	//	ffId := args[0]
-	//	operator := args[1]
+	operator := args[1]
 	pointsToModify := args[2]
 
 	userAsbytes, _ := t.getUser(stub, args)
@@ -91,6 +91,13 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	fmt.Println(totalPoints)
 	fmt.Println(pointsToModifyInt)
 
+	if operator == "Add" {
+		totalPoints = totalPoints + 100
+	}
+	else if operator == "Delete" {
+		totalPoints = totalPoints - 100
+	}
+	
 	totalPoints = totalPoints + 100
 
 	user.TotalPoints = strconv.Itoa(totalPoints)
