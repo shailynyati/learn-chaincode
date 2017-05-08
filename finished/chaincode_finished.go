@@ -59,7 +59,7 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 	UserRegistrationBytes, err := json.Marshal(user)
 	err = stub.PutState(args[0], UserRegistrationBytes)
 
-	if err != nil {     
+	if err != nil {
 		fmt.Println("Could not save UserRegistration to ledger", err)
 		return nil, err
 	}
@@ -79,16 +79,11 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	user_json := json.Unmarshal(userAsbytes, &user)
 	totalPoints = strconv.Atoi(user_json.TotalPoints)
 
-	if (operator == "Add") {
+	if operator == "Add" {
 		totalPoints += points
 		output = "success"
 	}
-	
-	else{
-		totalPoints-=points
-		output="success"
-	}
-	
+
 	user_json.totalPoints = totalPoints
 	UserRegistrationBytes := json.Marshal(user_json)
 
@@ -147,12 +142,12 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	if function == "read" { //read a variable
 		return t.read(stub, args)
 	}
-		if function == "getUser" {
-			return t.getUser(stub, args)
-		}
+	if function == "getUser" {
+		return t.getUser(stub, args)
+	}
 	if function == "getPoints" {
 		return t.getPoints(stub, args)
-	}       
+	}
 	fmt.Println("query did not find func: " + function)
 
 	return nil, errors.New("Received unknown function query: " + function)
