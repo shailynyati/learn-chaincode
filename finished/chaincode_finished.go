@@ -121,24 +121,22 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 }
 
 func (t *SimpleChaincode) getPoints(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	// assuming it is same args array passed
-	//	if len(args) < 1 {
-	//		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	//	}
-	//
-	//	user, err := t.getUser(stub, args)
-	//	//fmt.Println("getpoints " + user)
-	//
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//
-	//	u := UserRegistrationDetails{}
-	//	jsonResp := json.Unmarshal(user, &u)
-	//	points := []byte(u.TotalPoints)
-	//	//log.Println("user " + user_json)
-	//	return points, nil
-	return nil, nil
+	if len(args) < 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 1")
+	}
+
+	user, err := t.getUser(stub, args)
+	//fmt.Println("getpoints " + user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	u := UserRegistrationDetails{}
+	jsonResp := json.Unmarshal(user, &u)
+	points := []byte(u.TotalPoints)
+	//log.Println("user " + user_json)
+	return points, nil
 }
 
 // Init resets all the things
