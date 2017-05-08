@@ -76,9 +76,9 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	var output string
 	var totalPoints int
 	var pointsToModifyInt int
-	var err error
+	//var err error
 
-	ffId := args[0]
+	//ffId := args[0]
 	operator := args[1]
 	pointsToModify := args[2]
 
@@ -118,7 +118,7 @@ func (t *SimpleChaincode) getPoints(stub shim.ChaincodeStubInterface, args []str
 	}
 
 	u := UserRegistrationDetails{}
-	jsonResp := json.Unmarshal(user, &u)
+	//jsonResp := json.Unmarshal(user, &u)
 	points := []byte(u.TotalPoints)
 	//log.Println("user " + user_json)
 	return points, nil
