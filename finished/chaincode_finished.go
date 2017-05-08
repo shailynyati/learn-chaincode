@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"log"
-	//"strconv"
+	"strconv"
 )
 
 type SimpleChaincode struct {
@@ -73,6 +73,23 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 //args[1] = operator [add, delete]
 //args[2] = points [<number>]
 func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	var totalPoints int
+	var pointsToModifyInt int
+
+	//	ffId := args[0]
+	//	operator := args[1]
+	pointsToModify := args[2]
+
+	userAsbytes, _ := t.getUser(stub, args)
+	user := UserRegistrationDetails{}
+	err := json.Unmarshal(userAsbytes, &user)
+
+	totalPoints, _ = strconv.Atoi(user.TotalPoints)
+	pointsToModifyInt, _ = strconv.Atoi(pointsToModify)
+
+	fmt.Println(totalPoints)
+
 	//			var output string
 	//			var totalPoints int
 	//			var pointsToModifyInt int
