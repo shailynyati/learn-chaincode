@@ -93,7 +93,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 		return nil, err
 	}
 
-	totalPoints, _ = strconv.Atoi(userAsbytes.TotalPoints)
+	totalPoints, _ = strconv.Atoi(user.TotalPoints)
 	pointsToModifyInt, _ = strconv.Atoi(pointsToModify)
 
 	//fmt.Println("User currently owns number of points = %s", totalPoints)
