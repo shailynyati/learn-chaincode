@@ -75,6 +75,7 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var output string
 	var totalPoints int
+	var pointsToModifyInt int
 	var err error
 
 	ffId := args[0]
@@ -110,7 +111,7 @@ func (t *SimpleChaincode) getPoints(stub shim.ChaincodeStubInterface, args []str
 	}
 
 	user, err := t.getUser(stub, args)
-	fmt.Println("getpoints " + user)
+	//fmt.Println("getpoints " + user)
 
 	if err != nil {
 		return nil, err
