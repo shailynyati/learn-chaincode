@@ -58,7 +58,8 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 		TotalPoints: args[12]}
 
 	UserRegistrationBytes, err := json.Marshal(user)
-	err = stub.PutState(args[0], UserRegistrationBytes)
+	//err = stub.PutState(args[0], UserRegistrationBytes)
+	err = stub.PutState("5", UserRegistrationBytes)
 
 	if err != nil {
 		fmt.Println("Could not save UserRegistration to ledger", err)
