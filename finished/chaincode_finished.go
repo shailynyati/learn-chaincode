@@ -83,13 +83,12 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 		totalPoints += points
 		output = "success"
 	}
-		else if(totalPoints == 0) or (points>totalPoints){
-			output = "failure"          
-		}
-		 else{
-			totalPoints-=points
-			output="success"
-		 }
+	
+	else{
+		totalPoints-=points
+		output="success"
+	}
+	
 	user_json.totalPoints = totalPoints
 	UserRegistrationBytes := json.Marshal(user_json)
 
