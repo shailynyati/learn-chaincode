@@ -95,11 +95,11 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	fmt.Println("User currently owns number of points = %s", totalPoints)
 	fmt.Println("Point earned now: %s" + pointsToModifyInt)
 
-	if operator != "Add" {
+	if operator == "Add" {
 		totalPoints = totalPoints + 100
 	}
 
-	if operator != "Delete" {
+	if operator == "Delete" {
 		totalPoints = totalPoints - 100
 	}
 
