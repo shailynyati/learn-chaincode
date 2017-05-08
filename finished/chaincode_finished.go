@@ -96,8 +96,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 		totalPoints += pointsToModifyInt
 		output = "success"
 	}
-	else 
-	{
+	else {
 		totalPoints -= pointsToModifyInt
 		output = "success"
 	}
