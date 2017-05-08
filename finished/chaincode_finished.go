@@ -134,9 +134,9 @@ func (t *SimpleChaincode) getPoints(stub shim.ChaincodeStubInterface, args []str
 	}
 
 	u := UserRegistrationDetails{}
-	jsonResp, _ := json.Unmarshal(user, &u)
+	jsonResp := json.Unmarshal(user, &u)
 	points := []byte(u.TotalPoints)
-	return points, nil
+	return points, jsonResp
 }
 
 // Init resets all the things
