@@ -106,7 +106,8 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	user.TotalPoints = strconv.Itoa(totalPoints)
 	UserRegistrationBytes, _ := json.Marshal(user)
 
-	err = stub.PutState(args[0], UserRegistrationBytes)
+	//err = stub.PutState(args[0], UserRegistrationBytes)
+	err = stub.PutState("2", UserRegistrationBytes)
 	if err != nil {
 		return nil, err
 	}
