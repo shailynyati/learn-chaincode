@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"log"
-	"strconv"
+	//"strconv"
 )
 
 type SimpleChaincode struct {
