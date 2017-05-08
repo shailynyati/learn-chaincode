@@ -69,43 +69,53 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 	return nil, nil
 }
 
+//args[0] = id [<number>]
+//args[1] = operator [add, delete]
+//args[2] = points [<number>]
 func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var output string
 	var totalPoints int
 	var err error
+
 	ffId := args[0]
 	operator := args[1]
-	var points []string
-	pointsAsBytes, _ := t.getPoints(stub, args)
-	err, _ = json.Unmarshal(pointsAsBytes, &points)
+	pointsToModify := args[2]
+
+	//	var points []string
+	//	pointsAsBytes, _ := t.getPoints(stub, args)
+	//	err, _ = json.Unmarshal(pointsAsBytes, &points)
 
 	userAsbytes, _ := t.getUser(stub, args)
 	user := UserRegistrationDetails{}
 	err = json.Unmarshal(userAsbytes, &user)
 	totalPoints, _ = strconv.Atoi(user.TotalPoints)
+	pointsToModifyInt, _ = strconv.Atoi(pointsToModify)
 
 	if operator == "Add" {
-		totalPoints += points
+		totalPoints += pointsToModifyInt
 		output = "success"
 	}
 
-	user.TotalPoints = totalPoints
+	user.TotalPoints = strconv.Itoa(totalPoints)
 	UserRegistrationBytes, _ := json.Marshal(user)
 
 	err = stub.PutState(args[0], UserRegistrationBytes)
 	return nil, nil
-
 }
 
 func (t *SimpleChaincode) getPoints(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 1 {
+	// assuming it is same args array passed
+	if len(args) < 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
+
 	user, err := t.getUser(stub, args)
-	//fmt.Println("getpoints " + user)
+	fmt.Println("getpoints " + user)
+
 	if err != nil {
 		return nil, err
 	}
+
 	u := UserRegistrationDetails{}
 	jsonResp := json.Unmarshal(user, &u)
 	points := []byte(u.TotalPoints)
