@@ -96,8 +96,8 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	totalPoints, _ = strconv.Atoi(user.TotalPoints)
 	pointsToModifyInt, _ = strconv.Atoi(pointsToModify)
 
-	//fmt.Println("User currently owns number of points = %s", totalPoints)
-	//fmt.Println("Point earned now: %s" + pointsToModifyInt)
+	fmt.Println(totalPoints)
+	fmt.Println(pointsToModifyInt)
 
 	if operator == "Add" {
 		totalPoints = totalPoints + 100
@@ -113,8 +113,8 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	user.Title = "xyx"
 
 	UserRegistrationBytes, _ := json.Marshal(user)
-	//err = stub.PutState(args[0], UserRegistrationBytes)
-	err = stub.PutState(args[0], userAsbytes)
+	err = stub.PutState(args[0], UserRegistrationBytes)
+	//err = stub.PutState(args[0], userAsbytes)
 
 	if err != nil {
 		return nil, err
