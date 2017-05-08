@@ -59,7 +59,7 @@ func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []
 
 	UserRegistrationBytes, err := json.Marshal(user)
 	//err = stub.PutState(args[0], UserRegistrationBytes)
-	err = stub.PutState("5", UserRegistrationBytes)
+	err = stub.PutState(args[0], UserRegistrationBytes)
 
 	if err != nil {
 		fmt.Println("Could not save UserRegistration to ledger", err)
@@ -86,6 +86,8 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	user := UserRegistrationDetails{}
 	err := json.Unmarshal(userAsbytes, &user)
 
+	fmt.Println("***********************")
+
 	if err != nil {
 		return nil, err
 	}
@@ -104,11 +106,15 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 		totalPoints = totalPoints - 100
 	}
 
+	totalPoints = totalPoints + 100
+
 	user.TotalPoints = strconv.Itoa(totalPoints)
+
 	UserRegistrationBytes, _ := json.Marshal(user)
 
 	//err = stub.PutState(args[0], UserRegistrationBytes)
-	err = stub.PutState("2", UserRegistrationBytes)
+	err = stub.PutState(args[0], UserRegistrationBytes)
+
 	if err != nil {
 		return nil, err
 	}
