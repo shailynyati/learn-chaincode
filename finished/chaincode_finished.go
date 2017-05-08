@@ -122,7 +122,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 
 func (t *SimpleChaincode) getPoints(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	var jsonResp string
+	var jsonResp error
 	if len(args) < 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
