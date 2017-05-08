@@ -78,7 +78,7 @@ func (t *SimpleChaincode) AddDeletePoints(stub shim.ChaincodeStubInterface, args
 	userAsbytes := t.getUser(stub, args)
 	user := UserRegistrationDetails{}
 	user_json := json.Unmarshal(userAsbytes, &user)
-	totalPoints = []byte strconv.Atoi(user_json.TotalPoints)
+	totalPoints = []byte(strconv.Atoi(user_json.TotalPoints))
 
 	if operator == "Add" {
 		totalPoints += points
