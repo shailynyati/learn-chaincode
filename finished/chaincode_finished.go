@@ -1,4 +1,4 @@
-package main
+package finished
 
 import (
 	"encoding/json"
@@ -28,12 +28,12 @@ type UserRegistrationDetails struct {
 	TotalPoints string `json:"totalPoints"`
 }
 
-func main() {
-	err := shim.Start(new(SimpleChaincode))
-	if err != nil {
-		fmt.Printf("Error starting User registration: %s", err)
-	}
-}
+//func main() {
+//	err := shim.Start(new(SimpleChaincode))
+//	if err != nil {
+//		fmt.Printf("Error starting User registration: %s", err)
+//	}
+//}
 
 // To register User
 func (t *SimpleChaincode) RegisterUser(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
