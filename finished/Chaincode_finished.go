@@ -36,14 +36,12 @@ type LineItems struct {
 }
 
 //
-
 func main() {
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
 		fmt.Printf("Error in creating Purchase Order", err)
 	}
 }
-
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
 	var err error
