@@ -171,7 +171,7 @@ func (t *SimpleChaincode) getDealer(stub shim.ChaincodeStubInterface, args []str
 	fmt.Print(dealerID + " this is is the key ")
 	dealerAsbytes, err := stub.GetState(dealerID)
 	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to get state for " + poID + "\"}"
+		jsonResp = "{\"Error\":\"Failed to get state for " + dealerID + "\"}"
 		return nil, errors.New(jsonResp)
 	}
 	return dealerAsbytes, nil
