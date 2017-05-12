@@ -59,6 +59,10 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 // Invoke is your entry point to invoke a chaincode function
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
+	if function == "createDealer" {
+
+		return createDealer(stub, args)
+	}
 	if function == "createPO" {
 
 		return createPO(stub, args)
@@ -79,6 +83,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	if function == "getPO" {
 		return t.getPO(stub, args)
 	}
+	if function == "getDealer" {
+		return t.getDealer(stub, args)
+	}
 	if function == "getInvoice" {
 		return t.getInvoice(stub, args)
 	}
@@ -87,6 +94,24 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	return nil, errors.New("Received unknown function query: " + function)
 }
 
+func createDealer(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	dealer := Dealer{}
+
+	dealer.Id = args[0]
+	dealer.Name = args[1]
+	dealer.City = args[2]
+	dealer.Country = args[3]
+	dealer.Zip = args[4]
+	dealerBytes, err := json.Marshal(dealer)
+
+	if err != nil {
+		return nil, errors.New("Problem while saving Purchase Order in BlockChain Network")
+	}
+	err = stub.PutState("Dealer-"+args[0], dealerBytes)
+	return nil, nil
+
+}
 func createPO(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	purchaseOrder := PurchaseOrder{}
@@ -132,5 +157,24 @@ func (t *SimpleChaincode) getPO(stub shim.ChaincodeStubInterface, args []string)
 
 func (t *SimpleChaincode) getInvoice(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	//TODO
+	return nil, nil
+}
+
+func (t *SimpleChaincode) getDealer(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var jsonResp string
+	var err error
+
+	if len(args) < 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
+	}
+	dealerID := args[0] //keys to read from chaincode
+	fmt.Print(dealerID + " this is is the key ")
+	dealerAsbytes, err := stub.GetState(dealerID)
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to get state for " + poID + "\"}"
+		return nil, errors.New(jsonResp)
+	}
+	return dealerAsbytes, nil
+
 	return nil, nil
 }
