@@ -236,6 +236,7 @@ func fetchAllOrders(stub shim.ChaincodeStubInterface, args []string) ([]byte, er
 			break
 		}
 	}
+	fmt.Println("Get Rows==================>" + orderArray)
 
 	jsonRows, err := json.Marshal(orderArray)
 	if err != nil {
