@@ -51,6 +51,7 @@ func (t *SimpleChaincode) convert(row shim.Row) PO_tier1 {
 	po.SubOrder_Id = row.Columns[5].GetString_()
 	po.Order_Status = row.Columns[6].GetString_()
 	po.Asset_ID = row.Columns[7].GetString_()
+
 	return po
 }
 
